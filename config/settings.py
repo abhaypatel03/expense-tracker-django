@@ -34,13 +34,17 @@ DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in {
 }
 
 ALLOWED_HOSTS = [
-    host.strip()
-    for host in os.getenv(
-        "DJANGO_ALLOWED_HOSTS",
-        "localhost,127.0.0.1,testserver,expense-tracker-django-q53v.onrender.com"
-    ).split(",")
-    if host.strip()
+    "localhost",
+    "127.0.0.1",
+    "expense-tracker-django-2-epk3.onrender.com",
 ]
+
+for render_host in (
+    "expense-tracker-django-q53v.onrender.com",
+    "expense-tracker-django-1-02nv.onrender.com",
+):
+    if render_host not in ALLOWED_HOSTS:
+        ALLOWED_HOSTS.append(render_host)
 
 
 # Application definition
