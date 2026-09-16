@@ -36,7 +36,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", "True").lower() in {
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "expense-tracker-django-2-epk3.onrender.com",
+    "expense-tracker-djangoxx.onrender.com",
 ]
 
 for render_host in (
