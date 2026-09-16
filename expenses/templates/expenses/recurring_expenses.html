@@ -1,0 +1,196 @@
+{% extends "expenses/base.html" %}
+
+{% block title %}Recurring Expenses | Expense Tracker{% endblock %}
+
+{% block content %}
+<style>
+    .recurring-page {
+        width: 92%;
+        max-width: 1200px;
+        margin: 40px auto;
+    }
+
+    .recurring-page .heading {
+        margin-bottom: 25px;
+    }
+
+    .recurring-page .heading h1 {
+        font-size: 32px;
+        margin-bottom: 8px;
+    }
+
+    .recurring-page .heading p {
+        color: #64748b;
+        font-size: 14px;
+    }
+
+    .recurring-table-card {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 7px 25px rgba(0, 0, 0, .05);
+        overflow: hidden;
+    }
+
+    .recurring-table-wrapper {
+        overflow-x: auto;
+    }
+
+    .recurring-table {
+        width: 100%;
+        min-width: 820px;
+        border-collapse: collapse;
+    }
+
+    .recurring-table th {
+        background: #f8fafc;
+        color: #475569;
+        font-size: 12px;
+        text-align: left;
+        padding: 15px 18px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .recurring-table td {
+        padding: 15px 18px;
+        font-size: 13px;
+        border-bottom: 1px solid #eef2f7;
+    }
+
+    .recurring-table tbody tr:hover {
+        background: #fafafa;
+    }
+
+    .recurring-title {
+        font-weight: bold;
+        color: #172033;
+    }
+
+    .recurring-category {
+        display: inline-block;
+        padding: 5px 9px;
+        background: #eef2ff;
+        color: #4338ca;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: bold;
+    }
+
+    .recurring-amount {
+        font-weight: bold;
+        color: #dc2626;
+    }
+
+    .recurring-frequency {
+        color: #4f46e5;
+        font-weight: bold;
+    }
+
+    .recurring-actions {
+        display: flex;
+        gap: 7px;
+    }
+
+    .recurring-actions a {
+        padding: 7px 10px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    .recurring-edit {
+        background: #eef2ff;
+        color: #4338ca;
+    }
+
+    .recurring-delete {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .recurring-empty {
+        text-align: center;
+        padding: 60px 20px;
+        color: #64748b;
+    }
+
+    .recurring-empty h3 {
+        color: #334155;
+        margin-bottom: 7px;
+    }
+
+    .recurring-add {
+        display: inline-block;
+        margin-top: 18px;
+        padding: 11px 18px;
+        border-radius: 9px;
+        background: linear-gradient(90deg, #4f46e5, #7c3aed);
+        color: white;
+        font-size: 13px;
+        font-weight: bold;
+        text-decoration: none;
+    }
+
+    @media (max-width: 750px) {
+        .recurring-page {
+            width: 94%;
+        }
+
+        .recurring-page .heading h1 {
+            font-size: 27px;
+        }
+    }
+</style>
+
+<div class="recurring-page">
+    <div class="heading">
+        <h1>Recurring Expenses</h1>
+        <p>Manage expenses that repeat automatically.</p>
+    </div>
+
+    <div class="recurring-table-card">
+        {% if expenses %}
+            <div class="recurring-table-wrapper">
+                <table class="recurring-table">
+                    <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Original Date</th>
+                            <th>Frequency</th>
+                            <th>Next Recurring Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in expenses %}
+                            <tr>
+                                <td class="recurring-title">{{ expense.title }}</td>
+                                <td class="recurring-amount">₹{{ expense.amount|floatformat:2 }}</td>
+                                <td><span class="recurring-category">{{ expense.category }}</span></td>
+                                <td>{{ expense.date|date:"d M Y" }}</td>
+                                <td class="recurring-frequency">{{ expense.get_recurring_frequency_display }}</td>
+                                <td>{{ expense.next_recurring_date|date:"d M Y" }}</td>
+                                <td>
+                                    <div class="recurring-actions">
+                                        <a href="{% url 'edit_expense' expense.id %}" class="recurring-edit">✏️ Edit</a>
+                                        <a href="{% url 'delete_expense' expense.id %}" class="recurring-delete">🗑️ Delete</a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="recurring-empty">
+                <h3>No recurring expenses found</h3>
+                <p>Add a recurring expense to manage it here.</p>
+                <a href="{% url 'add_expense' %}" class="recurring-add">Add Expense</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

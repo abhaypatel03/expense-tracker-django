@@ -1,0 +1,510 @@
+{% extends "expenses/base.html" %}
+
+{% block title %}Add Expense | Expense Tracker{% endblock %}
+
+{% block content %}
+
+<style>
+    .expense-page {
+        min-height: calc(100vh - 80px);
+        padding: 45px 20px;
+        background: #f6f7fb;
+    }
+
+    .expense-wrapper {
+        max-width: 850px;
+        margin: auto;
+    }
+
+    .expense-header {
+        margin-bottom: 25px;
+    }
+
+    .expense-header h1 {
+        font-size: 32px;
+        color: #1f2937;
+        margin-bottom: 7px;
+    }
+
+    .expense-header p {
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+    .expense-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 35px;
+        box-shadow: 0 10px 35px rgba(0, 0, 0, 0.08);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 13px 15px;
+        border: 1px solid #d9dee8;
+        border-radius: 11px;
+        font-size: 15px;
+        outline: none;
+        background: #fff;
+        box-sizing: border-box;
+        transition: 0.2s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        border-color: #6c63ff;
+        box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.12);
+    }
+
+    .form-group textarea {
+        min-height: 120px;
+        resize: vertical;
+    }
+
+    .category-select {
+        position: relative;
+    }
+
+    .amount-box {
+        position: relative;
+    }
+
+    .amount-symbol {
+        position: absolute;
+        left: 15px;
+        top: 42px;
+        font-size: 17px;
+        font-weight: 600;
+        color: #6c63ff;
+    }
+
+    .amount-box input {
+        padding-left: 35px;
+    }
+
+    .error-message {
+        color: #dc2626;
+        font-size: 13px;
+        margin-top: 5px;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #edf0f4;
+    }
+
+    .btn {
+        border: none;
+        border-radius: 10px;
+        padding: 13px 24px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        text-decoration: none;
+        transition: 0.2s;
+    }
+
+    .btn-cancel {
+        background: #f1f3f7;
+        color: #374151;
+    }
+
+    .btn-cancel:hover {
+        background: #e5e7eb;
+    }
+
+    .btn-save {
+        background: #6c63ff;
+        color: white;
+    }
+
+    .btn-save:hover {
+        background: #574fe6;
+        transform: translateY(-1px);
+    }
+
+    .required {
+        color: #ef4444;
+    }
+
+    .recurring-toggle {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 17px;
+        border: 1px solid rgba(124, 58, 237, 0.28);
+        border-radius: 12px;
+        background: rgba(124, 58, 237, 0.08);
+        color: #fff;
+        cursor: pointer;
+        transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .recurring-toggle:hover {
+        border-color: rgba(124, 58, 237, 0.6);
+        background: rgba(124, 58, 237, 0.14);
+    }
+
+    .recurring-toggle input {
+        width: 19px;
+        height: 19px;
+        margin: 0;
+        accent-color: #7c3aed;
+        cursor: pointer;
+    }
+
+    .recurring-fields {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        transform: translateY(-6px);
+        transition: max-height 0.3s ease, opacity 0.25s ease, transform 0.3s ease;
+    }
+
+    .recurring-fields.is-visible {
+        max-height: 220px;
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @media (max-width: 650px) {
+        .expense-page {
+            padding: 25px 15px;
+        }
+
+        .expense-card {
+            padding: 22px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .recurring-fields {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+        .expense-header h1 {
+            font-size: 26px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+
+<div class="expense-page">
+
+    <div class="expense-wrapper">
+
+        <div class="expense-header">
+            <h1>Add Expense</h1>
+            <p>Record your daily expense and keep your finances organized.</p>
+        </div>
+
+        <div class="expense-card">
+
+            <form method="POST">
+
+                {% csrf_token %}
+
+                <div class="form-grid">
+
+                    <!-- TITLE -->
+                    <div class="form-group">
+                        <label>
+                            Expense Title <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            name="title"
+                            placeholder="e.g. Grocery Shopping"
+                            value="{{ form.title.value|default:'' }}"
+                            required
+                        >
+
+                        {% if form.title.errors %}
+                            <div class="error-message">
+                                {{ form.title.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+
+                    <!-- AMOUNT -->
+                    <div class="form-group amount-box">
+
+                        <label>
+                            Amount <span class="required">*</span>
+                        </label>
+
+                        <span class="amount-symbol">₹</span>
+
+                        <input
+                            type="number"
+                            name="amount"
+                            placeholder="0.00"
+                            step="0.01"
+                            min="0"
+                            value="{{ form.amount.value|default:'' }}"
+                            required
+                        >
+
+                        {% if form.amount.errors %}
+                            <div class="error-message">
+                                {{ form.amount.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- CATEGORY -->
+                    <div class="form-group">
+
+                        <label>
+                            Category <span class="required">*</span>
+                        </label>
+
+                        <select name="category" required>
+
+                            <option value="">Select Category</option>
+
+                            <option value="Food"
+                                {% if form.category.value == "Food" %}selected{% endif %}>
+                                🍔 Food
+                            </option>
+
+                            <option value="Travel"
+                                {% if form.category.value == "Travel" %}selected{% endif %}>
+                                🚗 Travel
+                            </option>
+
+                            <option value="Shopping"
+                                {% if form.category.value == "Shopping" %}selected{% endif %}>
+                                🛍️ Shopping
+                            </option>
+
+                            <option value="Bills"
+                                {% if form.category.value == "Bills" %}selected{% endif %}>
+                                💡 Bills
+                            </option>
+
+                            <option value="Entertainment"
+                                {% if form.category.value == "Entertainment" %}selected{% endif %}>
+                                🎮 Entertainment
+                            </option>
+
+                            <option value="Health"
+                                {% if form.category.value == "Health" %}selected{% endif %}>
+                                ❤️ Health
+                            </option>
+
+                            <option value="Education"
+                                {% if form.category.value == "Education" %}selected{% endif %}>
+                                📚 Education
+                            </option>
+
+                            <option value="Other"
+                                {% if form.category.value == "Other" %}selected{% endif %}>
+                                📦 Other
+                            </option>
+
+                        </select>
+
+                        {% if form.category.errors %}
+                            <div class="error-message">
+                                {{ form.category.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- DATE -->
+                    <div class="form-group">
+
+                        <label>
+                            Date <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="date"
+                            name="date"
+                            value="{{ form.date.value|default:'' }}"
+                            required
+                        >
+
+                        {% if form.date.errors %}
+                            <div class="error-message">
+                                {{ form.date.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+
+                    <!-- DESCRIPTION -->
+                    <div class="form-group full">
+
+                        <label>
+                            Description
+                        </label>
+
+                        <textarea
+                            name="description"
+                            placeholder="Add some details about this expense..."
+                        >{{ form.description.value|default:'' }}</textarea>
+
+                        {% if form.description.errors %}
+                            <div class="error-message">
+                                {{ form.description.errors.0 }}
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                    <label class="recurring-toggle" for="id_is_recurring">
+                        <input
+                            type="checkbox"
+                            name="is_recurring"
+                            id="id_is_recurring"
+                            {% if form.is_recurring.value %}checked{% endif %}
+                        >
+                        <span>This is a recurring expense</span>
+                    </label>
+
+                    <div class="recurring-fields" id="recurringFields">
+
+                        <div class="form-group">
+                            <label for="id_recurring_frequency">
+                                Frequency <span class="required">*</span>
+                            </label>
+
+                            <select name="recurring_frequency" id="id_recurring_frequency">
+                                <option value="">Select frequency</option>
+                                <option value="daily" {% if form.recurring_frequency.value == "daily" %}selected{% endif %}>Daily</option>
+                                <option value="weekly" {% if form.recurring_frequency.value == "weekly" %}selected{% endif %}>Weekly</option>
+                                <option value="monthly" {% if form.recurring_frequency.value == "monthly" %}selected{% endif %}>Monthly</option>
+                                <option value="yearly" {% if form.recurring_frequency.value == "yearly" %}selected{% endif %}>Yearly</option>
+                            </select>
+
+                            {% if form.recurring_frequency.errors %}
+                                <div class="error-message">
+                                    {{ form.recurring_frequency.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="form-group">
+                            <label for="id_next_recurring_date">
+                                Next Recurring Date <span class="required">*</span>
+                            </label>
+
+                            <input
+                                type="date"
+                                name="next_recurring_date"
+                                id="id_next_recurring_date"
+                                value="{{ form.next_recurring_date.value|default:'' }}"
+                            >
+
+                            {% if form.next_recurring_date.errors %}
+                                <div class="error-message">
+                                    {{ form.next_recurring_date.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BUTTONS -->
+                <div class="form-actions">
+
+                    <a href="{% url 'expenses' %}" class="btn btn-cancel">
+                        Cancel
+                    </a>
+
+                    <button type="submit" class="btn btn-save">
+                        + Add Expense
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+    (function () {
+        const checkbox = document.getElementById("id_is_recurring");
+        const recurringFields = document.getElementById("recurringFields");
+        const frequency = document.getElementById("id_recurring_frequency");
+        const nextDate = document.getElementById("id_next_recurring_date");
+
+        function toggleRecurringFields() {
+            const isRecurring = checkbox.checked;
+            recurringFields.classList.toggle("is-visible", isRecurring);
+            frequency.required = isRecurring;
+            nextDate.required = isRecurring;
+        }
+
+        checkbox.addEventListener("change", toggleRecurringFields);
+        toggleRecurringFields();
+    }());
+</script>
+
+{% endblock %}

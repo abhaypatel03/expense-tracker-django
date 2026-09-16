@@ -1,0 +1,456 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{% static 'expenses/app.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Delete Expense | Expense Tracker</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 20px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #312e81,
+                    #4f46e5,
+                    #7c3aed
+                );
+        }
+
+
+        .card {
+
+            width: 100%;
+
+            max-width: 450px;
+
+            background: white;
+
+            padding: 40px 32px;
+
+            border-radius: 24px;
+
+            text-align: center;
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,.35);
+
+            animation:
+                popup .35s ease;
+        }
+
+
+        @keyframes popup {
+
+            from {
+
+                opacity: 0;
+
+                transform:
+                    scale(.85)
+                    translateY(20px);
+            }
+
+            to {
+
+                opacity: 1;
+
+                transform:
+                    scale(1)
+                    translateY(0);
+            }
+        }
+
+
+        .icon {
+
+            width: 80px;
+
+            height: 80px;
+
+            margin:
+                0 auto 20px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 22px;
+
+            background: #fee2e2;
+
+            font-size: 38px;
+        }
+
+
+        h1 {
+
+            font-size: 27px;
+
+            color: #172033;
+
+            margin-bottom: 12px;
+        }
+
+
+        .message {
+
+            color: #64748b;
+
+            font-size: 14px;
+
+            line-height: 1.6;
+
+            margin-bottom: 22px;
+        }
+
+
+        .expense-box {
+
+            text-align: left;
+
+            background: #f8fafc;
+
+            border:
+                1px solid #e5e7eb;
+
+            padding: 16px;
+
+            border-radius: 12px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .expense-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            padding: 7px 0;
+
+            font-size: 13px;
+        }
+
+
+        .label {
+
+            color: #64748b;
+        }
+
+
+        .value {
+
+            font-weight: bold;
+
+            color: #172033;
+
+            text-align: right;
+        }
+
+
+        .amount {
+
+            color: #dc2626;
+        }
+
+
+        .buttons {
+
+            display: flex;
+
+            gap: 12px;
+        }
+
+
+        .btn {
+
+            flex: 1;
+
+            height: 48px;
+
+            border: none;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: .25s;
+        }
+
+
+        .cancel {
+
+            background: #eef2ff;
+
+            color: #4f46e5;
+        }
+
+
+        .cancel:hover {
+
+            background: #e0e7ff;
+
+            transform:
+                translateY(-2px);
+        }
+
+
+        .delete {
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #ef4444,
+                    #dc2626
+                );
+
+            color: white;
+
+            box-shadow:
+                0 8px 20px
+                rgba(239,68,68,.20);
+        }
+
+
+        .delete:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 12px 25px
+                rgba(239,68,68,.30);
+        }
+
+
+        .warning {
+
+            margin-top: 20px;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+
+        @media(max-width:500px) {
+
+            .card {
+
+                padding:
+                    30px 20px;
+            }
+
+
+            .buttons {
+
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="card">
+
+
+    <!-- ICON -->
+
+    <div class="icon">
+
+        🗑️
+
+    </div>
+
+
+    <!-- TITLE -->
+
+    <h1>
+
+        Delete Expense?
+
+    </h1>
+
+
+    <p class="message">
+
+        Are you sure you want to delete this expense?
+        This action cannot be undone.
+
+    </p>
+
+
+    <!-- EXPENSE DETAILS -->
+
+    <div class="expense-box">
+
+
+        <div class="expense-row">
+
+            <span class="label">
+                Title
+            </span>
+
+            <span class="value">
+                {{ expense.title }}
+            </span>
+
+        </div>
+
+
+        <div class="expense-row">
+
+            <span class="label">
+                Amount
+            </span>
+
+            <span class="value amount">
+                ₹{{ expense.amount|floatformat:2 }}
+            </span>
+
+        </div>
+
+
+        <div class="expense-row">
+
+            <span class="label">
+                Category
+            </span>
+
+            <span class="value">
+                {{ expense.category }}
+            </span>
+
+        </div>
+
+
+        <div class="expense-row">
+
+            <span class="label">
+                Date
+            </span>
+
+            <span class="value">
+                {{ expense.date }}
+            </span>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- BUTTONS -->
+
+    <div class="buttons">
+
+
+        <!-- CANCEL -->
+
+        <a
+            href="{% url 'expenses' %}"
+            class="btn cancel"
+        >
+
+            Cancel
+
+        </a>
+
+
+        <!-- DELETE -->
+
+        <form
+            method="POST"
+            style="flex:1;"
+        >
+
+            {% csrf_token %}
+
+            <button
+                type="submit"
+                class="btn delete"
+                style="width:100%;"
+            >
+
+                🗑️ Delete
+
+            </button>
+
+        </form>
+
+
+    </div>
+
+
+    <div class="warning">
+
+        ⚠️ Deleted expenses cannot be recovered.
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

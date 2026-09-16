@@ -1,0 +1,1246 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{% static 'expenses/app.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Create Account | Expense Tracker</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #312e81,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 30px;
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .register-wrapper {
+
+            width: 100%;
+
+            max-width: 1100px;
+
+            min-height: 680px;
+
+            display: grid;
+
+            grid-template-columns:
+                0.95fr 1.05fr;
+
+            border-radius: 28px;
+
+            overflow: hidden;
+
+            background: white;
+
+            box-shadow:
+                0 30px 80px
+                rgba(0,0,0,0.30);
+        }
+
+
+        /* =========================
+           LEFT SIDE
+        ========================= */
+
+        .left {
+
+            position: relative;
+
+            padding: 55px;
+
+            color: white;
+
+            overflow: hidden;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #312e81,
+                    #4f46e5,
+                    #7c3aed
+                );
+        }
+
+
+        .left::before {
+
+            content: "";
+
+            position: absolute;
+
+            width: 350px;
+
+            height: 350px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            top: -130px;
+
+            left: -130px;
+        }
+
+
+        .left::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 280px;
+
+            height: 280px;
+
+            border-radius: 50%;
+
+            background:
+                rgba(255,255,255,0.08);
+
+            bottom: -130px;
+
+            right: -100px;
+        }
+
+
+        .brand {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            margin-bottom: 80px;
+        }
+
+
+        .brand span {
+
+            display: inline-flex;
+
+            width: 45px;
+
+            height: 45px;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background:
+                rgba(255,255,255,0.15);
+
+            border-radius: 13px;
+
+            margin-right: 8px;
+        }
+
+
+        .left h1 {
+
+            position: relative;
+
+            z-index: 2;
+
+            font-size: 43px;
+
+            line-height: 1.12;
+
+            margin-bottom: 20px;
+        }
+
+
+        .left p {
+
+            position: relative;
+
+            z-index: 2;
+
+            color:
+                rgba(255,255,255,0.82);
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            max-width: 410px;
+        }
+
+
+        /* =========================
+           3D CARD
+        ========================= */
+
+        .visual {
+
+            position: relative;
+
+            height: 230px;
+
+            margin-top: 45px;
+        }
+
+
+        .platform {
+
+            position: absolute;
+
+            width: 380px;
+
+            height: 55px;
+
+            bottom: 5px;
+
+            left: 10px;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #a5b4fc,
+                    #7c3aed
+                );
+
+            transform:
+                rotateX(55deg);
+
+            box-shadow:
+                0 20px 35px
+                rgba(0,0,0,0.25);
+        }
+
+
+        .money-card {
+
+            position: absolute;
+
+            width: 280px;
+
+            height: 165px;
+
+            left: 55px;
+
+            bottom: 30px;
+
+            padding: 22px;
+
+            border-radius: 20px;
+
+            color: #172033;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #eef2ff
+                );
+
+            transform:
+                perspective(700px)
+                rotateX(12deg)
+                rotateY(-18deg)
+                rotateZ(-7deg);
+
+            box-shadow:
+                25px 30px 40px
+                rgba(0,0,0,0.30);
+        }
+
+
+        .money-title {
+
+            font-size: 11px;
+
+            color: #64748b;
+
+            margin-bottom: 13px;
+        }
+
+
+        .money-value {
+
+            color: #4f46e5;
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            margin-bottom: 25px;
+        }
+
+
+        .money-bottom {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            color: #64748b;
+
+            font-size: 10px;
+        }
+
+
+        .coin {
+
+            position: absolute;
+
+            right: 35px;
+
+            bottom: 20px;
+
+            width: 60px;
+
+            height: 60px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background:
+                linear-gradient(
+                    145deg,
+                    #fbbf24,
+                    #f59e0b
+                );
+
+            color: #78350f;
+
+            font-size: 27px;
+
+            font-weight: bold;
+
+            box-shadow:
+                8px 12px 20px
+                rgba(0,0,0,0.25);
+
+            animation:
+                float 3s ease-in-out infinite;
+        }
+
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform:
+                    translateY(0);
+            }
+
+            50% {
+                transform:
+                    translateY(-12px);
+            }
+
+        }
+
+
+        /* =========================
+           RIGHT SIDE
+        ========================= */
+
+        .right {
+
+            padding: 45px 55px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            background: #ffffff;
+        }
+
+
+        .right h2 {
+
+            color: #172033;
+
+            text-align: center;
+
+            font-size: 30px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .subtitle {
+
+            color: #64748b;
+
+            text-align: center;
+
+            font-size: 14px;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           ERROR
+        ========================= */
+
+        .error-box {
+
+            background: #fff1f2;
+
+            border: 1px solid #fecdd3;
+
+            color: #be123c;
+
+            border-radius: 10px;
+
+            padding: 12px;
+
+            font-size: 13px;
+
+            margin-bottom: 15px;
+        }
+
+
+        .error {
+
+            color: #dc2626;
+
+            font-size: 11px;
+
+            margin-top: 5px;
+        }
+
+
+        /* =========================
+           TWO COLUMNS
+        ========================= */
+
+        .row {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 14px;
+        }
+
+
+        .form-group {
+
+            margin-bottom: 15px;
+        }
+
+
+        label {
+
+            display: block;
+
+            color: #334155;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+
+        .input-wrapper {
+
+            position: relative;
+        }
+
+
+        .input-icon {
+
+            position: absolute;
+
+            left: 13px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            font-size: 15px;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            height: 48px;
+
+            border:
+                1px solid #dbe2ea;
+
+            border-radius: 10px;
+
+            background: #f8fafc;
+
+            outline: none;
+
+            padding:
+                0 40px;
+
+            font-size: 13px;
+
+            color: #172033;
+
+            transition: 0.25s;
+        }
+
+
+        input:focus {
+
+            background: white;
+
+            border-color: #6366f1;
+
+            box-shadow:
+                0 0 0 4px
+                rgba(99,102,241,0.10);
+        }
+
+
+        input::placeholder {
+
+            color: #94a3b8;
+        }
+
+
+        .eye {
+
+            position: absolute;
+
+            right: 12px;
+
+            top: 50%;
+
+            transform:
+                translateY(-50%);
+
+            border: none;
+
+            background: transparent;
+
+            cursor: pointer;
+
+            font-size: 15px;
+        }
+
+
+        /* =========================
+           BUTTON
+        ========================= */
+
+        .register-btn {
+
+            width: 100%;
+
+            height: 51px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            margin-top: 5px;
+
+            box-shadow:
+                0 12px 25px
+                rgba(79,70,229,0.28);
+
+            transition: 0.25s;
+        }
+
+
+        .register-btn:hover {
+
+            transform:
+                translateY(-2px);
+
+            box-shadow:
+                0 17px 30px
+                rgba(79,70,229,0.35);
+        }
+
+
+        /* =========================
+           LOGIN
+        ========================= */
+
+        .login {
+
+            text-align: center;
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-top: 20px;
+        }
+
+
+        .login a {
+
+            color: #4f46e5;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+
+        .login a:hover {
+
+            text-decoration: underline;
+        }
+
+
+        .security {
+
+            text-align: center;
+
+            color: #94a3b8;
+
+            font-size: 11px;
+
+            margin-top: 14px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 850px) {
+
+            .register-wrapper {
+
+                grid-template-columns: 1fr;
+
+                max-width: 520px;
+            }
+
+
+            .left {
+
+                display: none;
+            }
+
+
+            .right {
+
+                padding:
+                    40px 30px;
+            }
+
+        }
+
+
+        @media(max-width: 520px) {
+
+            body {
+
+                padding: 10px;
+            }
+
+
+            .right {
+
+                padding:
+                    35px 20px;
+            }
+
+
+            .row {
+
+                grid-template-columns: 1fr;
+
+                gap: 0;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="register-wrapper">
+
+
+    <!-- =========================
+         LEFT
+    ========================= -->
+
+    <div class="left">
+
+
+        <div class="brand">
+
+            <span>💰</span>
+
+            Expense Tracker
+
+        </div>
+
+
+        <h1>
+
+            Take control<br>
+
+            of your money.
+
+        </h1>
+
+
+        <p>
+
+            Create your account and manage
+            your expenses, monthly budget,
+            reports and financial activity
+            from one simple dashboard.
+
+        </p>
+
+
+        <div class="visual">
+
+
+            <div class="platform"></div>
+
+
+            <div class="money-card">
+
+                <div class="money-title">
+
+                    MONTHLY BUDGET
+
+                </div>
+
+
+                <div class="money-value">
+
+                    ₹20,000
+
+                </div>
+
+
+                <div class="money-bottom">
+
+                    <span>
+
+                        EXPENSE TRACKER
+
+                    </span>
+
+                    <span>
+
+                        2026
+
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <div class="coin">
+
+                ₹
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================
+         RIGHT
+    ========================= -->
+
+    <div class="right">
+
+
+        <h2>
+
+            Create Account
+
+        </h2>
+
+
+        <p class="subtitle">
+
+            Start tracking your expenses today
+
+        </p>
+
+
+        {% if form.non_field_errors %}
+
+            <div class="error-box">
+
+                {% for error in form.non_field_errors %}
+
+                    {{ error }}
+
+                {% endfor %}
+
+            </div>
+
+        {% endif %}
+
+
+        <form
+            method="POST"
+        >
+
+            {% csrf_token %}
+
+
+            <!-- FIRST + LAST NAME -->
+
+            <div class="row">
+
+
+                <div class="form-group">
+
+                    <label for="id_first_name">
+
+                        First Name
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+
+                            👤
+
+                        </span>
+
+
+                        <input
+                            type="text"
+                            name="first_name"
+                            id="id_first_name"
+                            placeholder="First name"
+                            value="{{ form.first_name.value|default:'' }}"
+                            autocomplete="given-name"
+                            required
+                        >
+
+                    </div>
+
+
+                    {% for error in form.first_name.errors %}
+
+                        <div class="error">
+
+                            {{ error }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="id_last_name">
+
+                        Last Name
+
+                    </label>
+
+
+                    <div class="input-wrapper">
+
+                        <span class="input-icon">
+
+                            👤
+
+                        </span>
+
+
+                        <input
+                            type="text"
+                            name="last_name"
+                            id="id_last_name"
+                            placeholder="Last name"
+                            value="{{ form.last_name.value|default:'' }}"
+                            autocomplete="family-name"
+                            required
+                        >
+
+                    </div>
+
+
+                    {% for error in form.last_name.errors %}
+
+                        <div class="error">
+
+                            {{ error }}
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+
+            <!-- USERNAME -->
+
+            <div class="form-group">
+
+                <label for="id_username">
+
+                    Username
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+
+                        @
+
+                    </span>
+
+
+                    <input
+                        type="text"
+                        name="username"
+                        id="id_username"
+                        placeholder="Choose a username"
+                        value="{{ form.username.value|default:'' }}"
+                        autocomplete="username"
+                        required
+                    >
+
+                </div>
+
+
+                {% for error in form.username.errors %}
+
+                    <div class="error">
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- EMAIL -->
+
+            <div class="form-group">
+
+                <label for="id_email">
+
+                    Email Address
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+
+                        ✉
+
+                    </span>
+
+
+                    <input
+                        type="email"
+                        name="email"
+                        id="id_email"
+                        placeholder="Enter your email"
+                        value="{{ form.email.value|default:'' }}"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                {% for error in form.email.errors %}
+
+                    <div class="error">
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="id_password1">
+
+                    Password
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+
+                        🔒
+
+                    </span>
+
+
+                    <input
+                        type="password"
+                        name="password1"
+                        id="id_password1"
+                        placeholder="Create a password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="eye"
+                        onclick="togglePassword(
+                            'id_password1',
+                            this
+                        )"
+                    >
+
+                        👁
+
+                    </button>
+
+                </div>
+
+
+                {% for error in form.password1.errors %}
+
+                    <div class="error">
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- CONFIRM PASSWORD -->
+
+            <div class="form-group">
+
+                <label for="id_password2">
+
+                    Confirm Password
+
+                </label>
+
+
+                <div class="input-wrapper">
+
+                    <span class="input-icon">
+
+                        🔐
+
+                    </span>
+
+
+                    <input
+                        type="password"
+                        name="password2"
+                        id="id_password2"
+                        placeholder="Confirm your password"
+                        autocomplete="new-password"
+                        required
+                    >
+
+
+                    <button
+                        type="button"
+                        class="eye"
+                        onclick="togglePassword(
+                            'id_password2',
+                            this
+                        )"
+                    >
+
+                        👁
+
+                    </button>
+
+                </div>
+
+
+                {% for error in form.password2.errors %}
+
+                    <div class="error">
+
+                        {{ error }}
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+
+            <!-- REGISTER -->
+
+            <button
+                type="submit"
+                class="register-btn"
+            >
+
+                Create Account →
+
+            </button>
+
+
+        </form>
+
+
+        <div class="login">
+
+            Already have an account?
+
+            <a href="{% url 'login' %}">
+
+                Login
+
+            </a>
+
+        </div>
+
+
+        <div class="security">
+
+            🔒 Your account information is securely protected
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function togglePassword(id, button) {
+
+        const input =
+            document.getElementById(id);
+
+
+        if (input.type === "password") {
+
+            input.type = "text";
+
+            button.innerHTML = "🙈";
+
+        } else {
+
+            input.type = "password";
+
+            button.innerHTML = "👁";
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1277 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{% static 'expenses/app.css' %}">
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Expenses | Expense Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 74px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: white;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 13px;
+            border-radius: 10px;
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .nav-links .active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+
+            margin: 40px auto;
+        }
+
+        .heading {
+            margin-bottom: 25px;
+        }
+
+        .heading h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .heading p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* =========================
+           SUMMARY
+        ========================= */
+
+        .summary {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .summary-card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 15px;
+
+            border:
+                1px solid #e5e7eb;
+
+            box-shadow:
+                0 7px 25px
+                rgba(0,0,0,.05);
+        }
+
+        .summary-title {
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .summary-value {
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #4f46e5;
+        }
+
+        /* =========================
+           FILTER CARD
+        ========================= */
+
+        .filter-card {
+            background: white;
+
+            padding: 22px;
+
+            border-radius: 16px;
+
+            border:
+                1px solid #e5e7eb;
+
+            box-shadow:
+                0 7px 25px
+                rgba(0,0,0,.05);
+
+            margin-bottom: 25px;
+        }
+
+        .filter-title {
+            font-size: 18px;
+
+            font-weight: bold;
+
+            margin-bottom: 18px;
+        }
+
+        .filter-form {
+            display: grid;
+
+            grid-template-columns:
+                1.5fr
+                1fr
+                1fr
+                1fr
+                1fr;
+
+            gap: 12px;
+
+            align-items: end;
+        }
+
+        .field label {
+            display: block;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            color: #475569;
+
+            margin-bottom: 7px;
+        }
+
+        .field input,
+        .field select {
+            width: 100%;
+
+            height: 43px;
+
+            padding: 0 12px;
+
+            border:
+                1px solid #dbe2ea;
+
+            border-radius: 9px;
+
+            outline: none;
+
+            background: white;
+
+            font-size: 13px;
+        }
+
+        .field input:focus,
+        .field select:focus {
+            border-color: #4f46e5;
+
+            box-shadow:
+                0 0 0 3px
+                rgba(79,70,229,.10);
+        }
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .filter-buttons {
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 15px;
+
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            height: 43px;
+
+            padding: 0 20px;
+
+            border: none;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+        }
+
+        .reset-btn {
+            height: 43px;
+
+            padding: 0 20px;
+
+            border-radius: 9px;
+
+            background: #f1f5f9;
+
+            color: #334155;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        .export-btn {
+            height: 43px;
+
+            padding: 0 20px;
+
+            border-radius: 9px;
+
+            background: #16a34a;
+
+            color: white;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            transition: .2s;
+        }
+
+        .export-btn:hover {
+            background: #15803d;
+
+            transform:
+                translateY(-1px);
+        }
+
+        .pdf-btn {
+            height: 43px;
+
+            padding: 0 20px;
+
+            border-radius: 9px;
+
+            background: #dc3545;
+
+            color: white;
+
+            text-decoration: none;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            transition: .2s;
+        }
+
+        .pdf-btn:hover {
+            background: #b91c1c;
+
+            transform:
+                translateY(-1px);
+        }
+
+        /* =========================
+           TABLE CARD
+        ========================= */
+
+        .table-card {
+            background: white;
+
+            border-radius: 16px;
+
+            border:
+                1px solid #e5e7eb;
+
+            box-shadow:
+                0 7px 25px
+                rgba(0,0,0,.05);
+
+            overflow: hidden;
+        }
+
+        .table-header {
+            padding: 20px 22px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+        .table-header h2 {
+            font-size: 19px;
+        }
+
+        .count {
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            min-width: 750px;
+        }
+
+        th {
+            background: #f8fafc;
+
+            color: #475569;
+
+            font-size: 12px;
+
+            text-align: left;
+
+            padding: 15px 18px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+        }
+
+        td {
+            padding: 15px 18px;
+
+            font-size: 13px;
+
+            border-bottom:
+                1px solid #eef2f7;
+        }
+
+        tr:hover {
+            background: #fafafa;
+        }
+
+        .title-cell {
+            font-weight: bold;
+
+            color: #172033;
+        }
+
+        .category {
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            background: #eef2ff;
+
+            color: #4338ca;
+
+            border-radius: 20px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+        .amount {
+            font-weight: bold;
+
+            color: #dc2626;
+        }
+
+        .description {
+            color: #64748b;
+
+            max-width: 200px;
+        }
+
+        /* =========================
+           ACTION BUTTONS
+        ========================= */
+
+        .actions {
+            display: flex;
+
+            gap: 7px;
+        }
+
+        .edit-btn,
+        .delete-btn {
+            text-decoration: none;
+
+            padding: 7px 10px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+            font-weight: bold;
+        }
+
+        .edit-btn {
+            background: #eef2ff;
+
+            color: #4338ca;
+        }
+
+        .delete-btn {
+            background: #fef2f2;
+
+            color: #dc2626;
+        }
+
+        .edit-btn:hover {
+            background: #e0e7ff;
+        }
+
+        .delete-btn:hover {
+            background: #fee2e2;
+        }
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 60px 20px;
+
+            color: #64748b;
+        }
+
+        .empty-icon {
+            font-size: 45px;
+
+            margin-bottom: 12px;
+        }
+
+        .empty h3 {
+            color: #334155;
+
+            margin-bottom: 7px;
+        }
+
+        .add-btn {
+            display: inline-block;
+
+            margin-top: 18px;
+
+            padding: 11px 18px;
+
+            border-radius: 9px;
+
+            background:
+                linear-gradient(
+                    90deg,
+                    #4f46e5,
+                    #7c3aed
+                );
+
+            color: white;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           PAGINATION
+        ========================= */
+
+        .pagination {
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 8px;
+
+            padding: 22px;
+
+            flex-wrap: wrap;
+        }
+
+        .pagination a,
+        .pagination span {
+            min-width: 36px;
+
+            height: 36px;
+
+            padding: 0 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 8px;
+
+            font-size: 12px;
+
+            text-decoration: none;
+        }
+
+        .pagination a {
+            background: #f1f5f9;
+
+            color: #334155;
+        }
+
+        .pagination a:hover {
+            background: #e0e7ff;
+
+            color: #4338ca;
+        }
+
+        .pagination .current {
+            background: #4f46e5;
+
+            color: white;
+
+            font-weight: bold;
+        }
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 950px) {
+
+            .filter-form {
+                grid-template-columns:
+                    1fr 1fr;
+            }
+        }
+
+        @media(max-width: 750px) {
+
+            .navbar {
+                padding: 15px 4%;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+            .nav-links {
+                justify-content: center;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-form {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                width: 94%;
+            }
+
+            .heading h1 {
+                font-size: 27px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+{% include "expenses/_navbar.html" %}
+
+<!-- legacy navbar markup below is intentionally removed -->
+<!--
+    <a href="{% url 'dashboard' %}" class="logo">
+        Expense Tracker
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}" class="active">
+            Dashboard
+        </a>
+
+        <a href="{% url 'expenses' %}">
+            Expenses
+        </a>
+
+        <a href="{% url 'add_expense' %}">
+            Add Expense
+        </a>
+
+        <a href="{% url 'reports' %}">
+            Reports
+        </a>
+
+        <a href="{% url 'budget' %}">
+            Budget
+        </a>
+
+        <a href="{% url 'profile' %}">
+            Profile
+        </a>
+
+        <a href="{% url 'notifications' %}">
+            Notifications
+        </a>
+
+        <a href="{% url 'logout_confirm' %}" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+-->
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- HEADING -->
+
+    <div class="heading">
+
+        <h1>
+            My Expenses
+        </h1>
+
+        <p>
+            Search, filter and manage all your expenses.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <div class="summary">
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+                Total Expenses
+            </div>
+
+            <div class="summary-value">
+                ₹{{ total|default:0|floatformat:2 }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+                This Month
+            </div>
+
+            <div class="summary-value">
+                ₹{{ month_total|default:0|floatformat:2 }}
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+                Number of Expenses
+            </div>
+
+            <div class="summary-value">
+                {{ count|default:0 }}
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         FILTER
+    ========================= -->
+
+    <div class="filter-card">
+
+
+        <div class="filter-title">
+            Search & Filter
+        </div>
+
+
+        <form
+            method="GET"
+            class="filter-form"
+        >
+
+
+            <!-- SEARCH -->
+
+            <div class="field">
+
+                <label>
+                    Search
+                </label>
+
+                <input
+                    type="text"
+                    name="search"
+                    value="{{ search }}"
+                    placeholder="Search expense..."
+                >
+
+            </div>
+
+
+            <!-- CATEGORY -->
+
+            <div class="field">
+
+                <label>
+                    Category
+                </label>
+
+                <input
+                    type="text"
+                    name="category"
+                    value="{{ selected_category }}"
+                    placeholder="e.g. Food"
+                >
+
+            </div>
+
+
+            <!-- FROM DATE -->
+
+            <div class="field">
+
+                <label>
+                    📅 From Date
+                </label>
+
+                <input
+                    type="date"
+                    name="from_date"
+                    value="{{ from_date }}"
+                >
+
+            </div>
+
+
+            <!-- TO DATE -->
+
+            <div class="field">
+
+                <label>
+                    📅 To Date
+                </label>
+
+                <input
+                    type="date"
+                    name="to_date"
+                    value="{{ to_date }}"
+                >
+
+            </div>
+
+
+            <!-- SORT -->
+
+            <div class="field">
+
+                <label>
+                    💰 Sort By
+                </label>
+
+                <select name="sort">
+
+                    <option
+                        value=""
+                        {% if not sort %}
+                            selected
+                        {% endif %}
+                    >
+                        Newest → Oldest
+                    </option>
+
+                    <option
+                        value="newest"
+                        {% if sort == "newest" %}
+                            selected
+                        {% endif %}
+                    >
+                        Newest → Oldest
+                    </option>
+
+                    <option
+                        value="oldest"
+                        {% if sort == "oldest" %}
+                            selected
+                        {% endif %}
+                    >
+                        Oldest → Newest
+                    </option>
+
+                    <option
+                        value="amount_asc"
+                        {% if sort == "amount_asc" %}
+                            selected
+                        {% endif %}
+                    >
+                        Amount Low → High
+                    </option>
+
+                    <option
+                        value="amount_desc"
+                        {% if sort == "amount_desc" %}
+                            selected
+                        {% endif %}
+                    >
+                        Amount High → Low
+                    </option>
+
+                </select>
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="filter-buttons">
+
+
+                <!-- APPLY FILTER -->
+
+                <button
+                    type="submit"
+                    class="filter-btn"
+                >
+                    🔎 Apply Filter
+                </button>
+
+
+                <!-- RESET -->
+
+                <a
+                    href="{% url 'expenses' %}"
+                    class="reset-btn"
+                >
+                    ↻ Reset
+                </a>
+
+
+                <!-- CSV -->
+
+                <a
+                    href="{% url 'export_csv' %}?search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                    class="export-btn"
+                >
+                    📥 Export CSV
+                </a>
+
+
+                <!-- PDF -->
+
+                <a
+                    href="{% url 'export_pdf' %}?search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                    class="pdf-btn"
+                >
+                    📄 Export PDF
+                </a>
+
+
+            </div>
+
+
+        </form>
+
+    </div>
+
+
+    <!-- =========================
+         EXPENSE TABLE
+    ========================= -->
+
+    <div class="table-card">
+
+
+        <div class="table-header">
+
+            <h2>
+                Expense List
+            </h2>
+
+            <div class="count">
+                {{ count|default:0 }} expenses
+            </div>
+
+        </div>
+
+
+        {% if expenses %}
+
+
+        <div class="table-wrapper">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Title
+                        </th>
+
+                        <th>
+                            Amount
+                        </th>
+
+                        <th>
+                            Category
+                        </th>
+
+                        <th>
+                            Date
+                        </th>
+
+                        <th>
+                            Description
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+
+                    {% for expense in expenses %}
+
+
+                    <tr>
+
+
+                        <td class="title-cell">
+                            {{ expense.title }}
+                        </td>
+
+
+                        <td class="amount">
+                            ₹{{ expense.amount|floatformat:2 }}
+                        </td>
+
+
+                        <td>
+
+                            <span class="category">
+                                {{ expense.category }}
+                            </span>
+
+                        </td>
+
+
+                        <td>
+                            {{ expense.date|date:"d M Y" }}
+                        </td>
+
+
+                        <td class="description">
+
+                            {% if expense.description %}
+
+                                {{ expense.description|truncatechars:45 }}
+
+                            {% else %}
+
+                                —
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <td>
+
+                            <div class="actions">
+
+
+                                <a
+                                    href="{% url 'edit_expense' expense.id %}"
+                                    class="edit-btn"
+                                >
+                                    ✏️ Edit
+                                </a>
+
+
+                                <a
+                                    href="{% url 'delete_expense' expense.id %}"
+                                    class="delete-btn"
+                                >
+                                    🗑️ Delete
+                                </a>
+
+
+                            </div>
+
+                        </td>
+
+
+                    </tr>
+
+
+                    {% endfor %}
+
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =========================
+             PAGINATION
+        ========================= -->
+
+        {% if page_obj.paginator.num_pages > 1 %}
+
+
+        <div class="pagination">
+
+
+            {% if page_obj.has_previous %}
+
+                <a
+                    href="?page=1&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                >
+                    First
+                </a>
+
+
+                <a
+                    href="?page={{ page_obj.previous_page_number }}&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                >
+                    ←
+                </a>
+
+            {% endif %}
+
+
+            <span class="current">
+
+                Page {{ page_obj.number }}
+
+                /
+
+                {{ page_obj.paginator.num_pages }}
+
+            </span>
+
+
+            {% if page_obj.has_next %}
+
+
+                <a
+                    href="?page={{ page_obj.next_page_number }}&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                >
+                    →
+                </a>
+
+
+                <a
+                    href="?page={{ page_obj.paginator.num_pages }}&search={{ search|urlencode }}&category={{ selected_category|urlencode }}&from_date={{ from_date|urlencode }}&to_date={{ to_date|urlencode }}&sort={{ sort|urlencode }}"
+                >
+                    Last
+                </a>
+
+
+            {% endif %}
+
+
+        </div>
+
+
+        {% endif %}
+
+
+        {% else %}
+
+
+        <!-- =========================
+             EMPTY STATE
+        ========================= -->
+
+        <div class="empty">
+
+            <div class="empty-icon">
+                💸
+            </div>
+
+
+            <h3>
+                No expenses found
+            </h3>
+
+
+            <p>
+                Try changing your search/filter or add a new expense.
+            </p>
+
+
+            <a
+                href="{% url 'add_expense' %}"
+                class="add-btn"
+            >
+                ➕ Add Expense
+            </a>
+
+        </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+</div>
+
+
+</body>
+
+</html>

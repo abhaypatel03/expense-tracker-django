@@ -1,0 +1,775 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{% static 'expenses/app.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Profile | Expense Tracker</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(180deg, #eef3ff 0%, #f8fafc 100%);
+            color: #0F172A;
+        }
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 74px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: white;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            position: relative;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 13px;
+            border-radius: 10px;
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .nav-links .active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+
+        .notification-link {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -12px;
+            right: -14px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: #ef4444;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 90%;
+            max-width: 1050px;
+
+            margin: 55px auto;
+        }
+
+
+        /* =========================
+           HEADER
+        ========================= */
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #64748b;
+        }
+
+
+        /* =========================
+           PROFILE
+        ========================= */
+
+        .profile-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            padding: 30px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.05);
+
+            margin-bottom: 25px;
+        }
+
+        .profile-top {
+            display: flex;
+
+            align-items: center;
+
+            gap: 22px;
+
+            padding-bottom: 25px;
+
+            border-bottom:
+                1px solid #e5e7eb;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================
+           AVATAR
+        ========================= */
+
+        .avatar {
+            width: 90px;
+            height: 90px;
+
+            border-radius: 50%;
+
+            background: linear-gradient(
+                135deg,
+                #4f46e5,
+                #7c3aed
+            );
+
+            color: white;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 34px;
+            font-weight: bold;
+        }
+
+        .profile-name h2 {
+            font-size: 25px;
+
+            margin-bottom: 6px;
+        }
+
+        .profile-name p {
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           INFORMATION
+        ========================= */
+
+        .info-title {
+            font-size: 19px;
+
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .info-item {
+            background: #f8fafc;
+
+            padding: 17px;
+
+            border-radius: 10px;
+
+            border: 1px solid #eef2f7;
+        }
+
+        .info-label {
+            color: #64748b;
+
+            font-size: 12px;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 15px;
+
+            font-weight: 600;
+
+            word-break: break-word;
+        }
+
+
+        /* =========================
+           ACTIONS
+        ========================= */
+
+        .actions {
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr 1fr;
+
+            gap: 15px;
+
+            margin-top: 25px;
+        }
+
+        .action-btn {
+            display: block;
+
+            text-align: center;
+
+            padding: 13px 15px;
+
+            border-radius: 9px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition: 0.2s;
+        }
+
+        .edit-btn {
+            background: #eef2ff;
+
+            color: #4f46e5;
+        }
+
+        .password-btn {
+            background: #f3e8ff;
+
+            color: #7c3aed;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+
+            color: #dc2626;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           ACCOUNT STATS
+        ========================= */
+
+        .stats {
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+
+            border: 1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 23px;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.04);
+        }
+
+        .stat-title {
+            color: #64748b;
+
+            font-size: 13px;
+
+            margin-bottom: 10px;
+
+            font-weight: bold;
+        }
+
+        .stat-value {
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #4f46e5;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            margin-top: 65px;
+
+            padding: 30px;
+
+            background: white;
+
+            border-top:
+                1px solid #e5e7eb;
+
+            text-align: center;
+
+            color: #64748b;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media (max-width: 850px) {
+
+            .navbar {
+                height: auto;
+
+                padding: 16px 20px;
+
+                flex-direction: column;
+
+                gap: 15px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+
+                justify-content: center;
+
+                gap: 15px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+
+        @media (max-width: 600px) {
+
+            .container {
+                width: 92%;
+
+                margin: 40px auto;
+            }
+
+            .page-header h1 {
+                font-size: 27px;
+            }
+
+            .profile-top {
+                flex-direction: column;
+
+                text-align: center;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .actions {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+{% include "expenses/_navbar.html" %}
+
+<!-- legacy navbar markup below is intentionally removed -->
+<!--
+    <a href="{% url 'dashboard' %}" class="logo">
+        Expense Tracker
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'expenses' %}">
+            Expenses
+        </a>
+
+        <a href="{% url 'add_expense' %}">
+            Add Expense
+        </a>
+
+        <a href="{% url 'reports' %}">
+            Reports
+        </a>
+
+        <a href="{% url 'budget' %}">
+            Budget
+        </a>
+
+        <a href="{% url 'profile' %}" class="active">
+            Profile
+        </a>
+
+        <a href="{% url 'notifications' %}">
+            Notifications
+        </a>
+
+        <a href="{% url 'logout_confirm' %}" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+-->
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <div class="page-header">
+
+        <h1>
+            My Profile
+        </h1>
+
+        <p>
+            Manage your account information.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         PROFILE CARD
+    ========================= -->
+
+    <div class="profile-card">
+
+
+        <div class="profile-top">
+
+
+            <div class="avatar">
+
+                {% if request.user.first_name %}
+
+                    {{ request.user.first_name|first|upper }}
+
+                {% else %}
+
+                    {{ request.user.username|first|upper }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="profile-name">
+
+                <h2>
+
+                    {% if request.user.get_full_name %}
+
+                        {{ request.user.get_full_name }}
+
+                    {% else %}
+
+                        {{ request.user.username }}
+
+                    {% endif %}
+
+                </h2>
+
+
+                <p>
+
+                    @{{ request.user.username }}
+
+                </p>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             INFORMATION
+        ========================= -->
+
+        <h2 class="info-title">
+            Account Information
+        </h2>
+
+
+        <div class="info-grid">
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    Username
+                </div>
+
+                <div class="info-value">
+
+                    {{ request.user.username }}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    Email
+                </div>
+
+                <div class="info-value">
+
+                    {% if request.user.email %}
+
+                        {{ request.user.email }}
+
+                    {% else %}
+
+                        Not added
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    First Name
+                </div>
+
+                <div class="info-value">
+
+                    {% if request.user.first_name %}
+
+                        {{ request.user.first_name }}
+
+                    {% else %}
+
+                        Not added
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    Last Name
+                </div>
+
+                <div class="info-value">
+
+                    {% if request.user.last_name %}
+
+                        {{ request.user.last_name }}
+
+                    {% else %}
+
+                        Not added
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    Account Created
+                </div>
+
+                <div class="info-value">
+
+                    {{ request.user.date_joined|date:"M d, Y" }}
+
+                </div>
+
+            </div>
+
+
+            <div class="info-item">
+
+                <div class="info-label">
+                    Last Login
+                </div>
+
+                <div class="info-value">
+
+                    {{ request.user.last_login|date:"M d, Y H:i" }}
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =========================
+             ACTION BUTTONS
+        ========================= -->
+
+        <div class="actions">
+
+
+            <a
+                href="{% url 'edit_profile' %}"
+                class="action-btn edit-btn"
+            >
+
+                ✏️ Edit Profile
+
+            </a>
+
+
+            <a
+                href="{% url 'change_password' %}"
+                class="action-btn password-btn"
+            >
+
+                🔐 Change Password
+
+            </a>
+
+
+            <a
+                href="{% url 'logout' %}"
+                class="action-btn logout-btn"
+            >
+
+                🚪 Logout
+
+            </a>
+
+
+        </div>
+
+
+    </div>
+
+
+    
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    © 2026 Expense Tracker. All Rights Reserved.
+
+</footer>
+
+
+</body>
+
+</html>

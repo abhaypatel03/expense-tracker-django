@@ -1,0 +1,88 @@
+<style>
+    .app-navbar {
+        min-height: 74px;
+        padding: 12px 32px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.18);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .app-navbar .logo {
+        color: #fff;
+        font-size: 22px;
+        font-weight: 800;
+        letter-spacing: -0.03em;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
+    .app-navbar .nav-links {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 6px;
+        flex-wrap: wrap;
+    }
+
+    .app-navbar .nav-links a {
+        color: #fff;
+        padding: 9px 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background 0.2s ease, transform 0.2s ease;
+    }
+
+    .app-navbar .nav-links a:hover,
+    .app-navbar .nav-links a.active {
+        background: rgba(255, 255, 255, 0.18);
+        transform: translateY(-1px);
+    }
+
+    .app-navbar .nav-links a.logout-btn {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+    }
+
+    @media (max-width: 900px) {
+        .app-navbar {
+            align-items: flex-start;
+            flex-direction: column;
+            padding: 16px 20px;
+        }
+
+        .app-navbar .nav-links {
+            justify-content: flex-start;
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 520px) {
+        .app-navbar .nav-links a {
+            font-size: 12px;
+            padding: 8px 9px;
+        }
+    }
+</style>
+
+<nav class="app-navbar" aria-label="Main navigation">
+    <a href="{% url 'dashboard' %}" class="logo">Expense Tracker</a>
+    <div class="nav-links">
+        <a href="{% url 'dashboard' %}" class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{% url 'expenses' %}" class="{% if request.resolver_match.url_name == 'expenses' %}active{% endif %}">Expenses</a>
+        <a href="{% url 'add_expense' %}" class="{% if request.resolver_match.url_name == 'add_expense' or request.resolver_match.url_name == 'edit_expense' %}active{% endif %}">Add Expense</a>
+        <a href="{% url 'recurring_expenses' %}" class="{% if request.resolver_match.url_name == 'recurring_expenses' %}active{% endif %}">Recurring</a>
+        <a href="{% url 'reports' %}" class="{% if request.resolver_match.url_name == 'reports' %}active{% endif %}">Reports</a>
+        <a href="{% url 'budget' %}" class="{% if request.resolver_match.url_name == 'budget' %}active{% endif %}">Budget</a>
+        <a href="{% url 'notifications' %}" class="{% if request.resolver_match.url_name == 'notifications' %}active{% endif %}">Notifications</a>
+        <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' or request.resolver_match.url_name == 'edit_profile' or request.resolver_match.url_name == 'change_password' %}active{% endif %}">Profile</a>
+        <a href="{% url 'logout_confirm' %}" class="logout-btn">Logout</a>
+    </div>
+</nav>

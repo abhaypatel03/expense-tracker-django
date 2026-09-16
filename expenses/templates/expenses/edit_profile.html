@@ -1,0 +1,401 @@
+{% extends "expenses/base.html" %}
+
+{% block title %}Edit Profile - Expense Tracker{% endblock %}
+
+{% block content %}
+
+<style>
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .edit-profile-page {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 45px 20px;
+    }
+
+    /* HEADER */
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+    .page-header h1 {
+        margin: 0;
+        font-size: 32px;
+        font-weight: 700;
+        color: #111827;
+    }
+
+    .page-header p {
+        margin-top: 8px;
+        color: #6b7280;
+        font-size: 15px;
+    }
+
+
+    /* CARD */
+
+    .profile-card {
+        background: white;
+        border-radius: 18px;
+        padding: 35px;
+        border: 1px solid #e5e7eb;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+    }
+
+
+    /* PROFILE TOP */
+
+    .profile-top {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding-bottom: 28px;
+        margin-bottom: 30px;
+        border-bottom: 1px solid #eeeeee;
+    }
+
+    .avatar {
+        width: 75px;
+        height: 75px;
+        border-radius: 50%;
+        background: #4f46e5;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 28px;
+        font-weight: 700;
+    }
+
+    .profile-info h2 {
+        margin: 0;
+        font-size: 22px;
+        color: #111827;
+    }
+
+    .profile-info p {
+        margin: 5px 0 0;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+
+    /* FORM */
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 22px;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .form-group.full {
+        grid-column: 1 / -1;
+    }
+
+    .form-group label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+        margin-bottom: 8px;
+    }
+
+    .form-group input {
+        width: 100%;
+        padding: 14px 15px;
+        border: 1px solid #d1d5db;
+        border-radius: 10px;
+        font-size: 15px;
+        outline: none;
+        transition: 0.2s;
+        background: #ffffff;
+    }
+
+    .form-group input:focus {
+        border-color: #4f46e5;
+        box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+    }
+
+
+    /* USERNAME */
+
+    .username-box {
+        background: #f9fafb;
+        color: #6b7280;
+        cursor: not-allowed;
+    }
+
+    .help-text {
+        margin-top: 7px;
+        color: #9ca3af;
+        font-size: 12px;
+    }
+
+
+    /* BUTTONS */
+
+    .button-area {
+        display: flex;
+        justify-content: flex-end;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 25px;
+        border-top: 1px solid #eeeeee;
+    }
+
+    .btn {
+        padding: 13px 22px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .cancel-btn {
+        background: #f3f4f6;
+        color: #374151;
+    }
+
+    .cancel-btn:hover {
+        background: #e5e7eb;
+    }
+
+    .save-btn {
+        background: #4f46e5;
+        color: white;
+    }
+
+    .save-btn:hover {
+        background: #4338ca;
+        transform: translateY(-1px);
+    }
+
+
+    /* RESPONSIVE */
+
+    @media (max-width: 650px) {
+
+        .edit-profile-page {
+            padding: 25px 15px;
+        }
+
+        .profile-card {
+            padding: 22px;
+        }
+
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group.full {
+            grid-column: auto;
+        }
+
+        .profile-top {
+            align-items: flex-start;
+        }
+
+        .button-area {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+            text-align: center;
+        }
+
+    }
+
+</style>
+
+
+<div class="edit-profile-page">
+
+
+    <!-- HEADER -->
+
+    <div class="page-header">
+
+        <h1>Edit Profile</h1>
+
+        <p>
+            Update your personal information and account details.
+        </p>
+
+    </div>
+
+
+    <!-- PROFILE CARD -->
+
+    <div class="profile-card">
+
+
+        <!-- PROFILE TOP -->
+
+        <div class="profile-top">
+
+            <div class="avatar">
+
+                {% if request.user.first_name %}
+
+                    {{ request.user.first_name|first|upper }}
+
+                {% else %}
+
+                    {{ request.user.username|first|upper }}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="profile-info">
+
+                <h2>
+                    {{ request.user.username }}
+                </h2>
+
+                <p>
+                    Manage your profile information
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- FORM -->
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+
+            <div class="form-grid">
+
+
+                <!-- FIRST NAME -->
+
+                <div class="form-group">
+
+                    <label for="first_name">
+                        First Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="first_name"
+                        name="first_name"
+                        value="{{ request.user.first_name }}"
+                        placeholder="Enter first name"
+                    >
+
+                </div>
+
+
+                <!-- LAST NAME -->
+
+                <div class="form-group">
+
+                    <label for="last_name">
+                        Last Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="last_name"
+                        name="last_name"
+                        value="{{ request.user.last_name }}"
+                        placeholder="Enter last name"
+                    >
+
+                </div>
+
+
+                <!-- USERNAME -->
+
+                <div class="form-group full">
+
+                    <label for="username">
+                        Username
+                    </label>
+
+                    <input
+                        type="text"
+                        id="username"
+                        value="{{ request.user.username }}"
+                        class="username-box"
+                        readonly
+                    >
+
+                    <div class="help-text">
+                        Username cannot be changed from this page.
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+
+                <div class="form-group full">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ request.user.email }}"
+                        placeholder="Enter your email address"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <!-- BUTTONS -->
+
+            <div class="button-area">
+
+                <a
+                    href="{% url 'profile' %}"
+                    class="btn cancel-btn"
+                >
+                    Cancel
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="btn save-btn"
+                >
+                    Save Changes
+                </button>
+
+            </div>
+
+
+        </form>
+
+
+    </div>
+
+
+</div>
+
+{% endblock %}

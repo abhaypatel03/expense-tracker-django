@@ -1,0 +1,1160 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="{% static 'expenses/app.css' %}">
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Notifications | Expense Tracker</title>
+
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        body {
+
+            font-family:
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            background: #f5f7fb;
+
+            color: #172033;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        .navbar {
+            height: 74px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 35px;
+            color: white;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.18);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            color: white;
+            font-size: 23px;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 9px 13px;
+            border-radius: 10px;
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .nav-links .active {
+            background: rgba(255, 255, 255, 0.18);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white !important;
+            padding: 10px 16px;
+            border-radius: 10px;
+            box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+        }
+
+
+        /* =========================
+           MAIN
+        ========================= */
+
+        .container {
+
+            width: 90%;
+
+            max-width: 1050px;
+
+            margin:
+                35px auto;
+        }
+
+
+        .heading {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+        }
+
+
+        .heading h1 {
+
+            font-size: 31px;
+
+            margin-bottom: 7px;
+        }
+
+
+        .heading p {
+
+            color: #64748b;
+
+            font-size: 14px;
+        }
+
+
+        .mark-all {
+
+            border: none;
+
+            background:
+                #eef2ff;
+
+            color: #4f46e5;
+
+            padding:
+                10px 15px;
+
+            border-radius: 9px;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        .mark-all:hover {
+
+            background: #e0e7ff;
+
+            transform:
+                translateY(-1px);
+        }
+
+
+        /* =========================
+           NOTIFICATION SUMMARY
+        ========================= */
+
+        .summary {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 22px;
+        }
+
+
+        .summary-card {
+
+            background: white;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 14px;
+
+            padding: 19px;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.04);
+        }
+
+
+        .summary-title {
+
+            color: #64748b;
+
+            font-size: 12px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .summary-value {
+
+            font-size: 25px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           NOTIFICATIONS BOX
+        ========================= */
+
+        .notification-box {
+
+            background: white;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 16px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 5px 20px
+                rgba(0,0,0,0.05);
+        }
+
+
+        .box-header {
+
+            padding:
+                21px 23px;
+
+            border-bottom:
+                1px solid #eef2f7;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .box-header h2 {
+
+            font-size: 19px;
+        }
+
+
+        .notification-count {
+
+            background:
+                #eef2ff;
+
+            color: #4f46e5;
+
+            padding:
+                5px 10px;
+
+            border-radius: 20px;
+
+            font-size: 12px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           NOTIFICATION ITEM
+        ========================= */
+
+        .notification {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 16px;
+
+            padding:
+                20px 23px;
+
+            border-bottom:
+                1px solid #eef2f7;
+
+            transition: 0.2s;
+
+            position: relative;
+        }
+
+
+        .notification:last-child {
+
+            border-bottom: none;
+        }
+
+
+        .notification:hover {
+
+            background: #fafbff;
+        }
+
+
+        .notification.unread {
+
+            background:
+                #f8f9ff;
+        }
+
+
+        .notification.unread::before {
+
+            content: "";
+
+            position: absolute;
+
+            left: 0;
+
+            top: 0;
+
+            bottom: 0;
+
+            width: 4px;
+
+            background:
+                #4f46e5;
+        }
+
+
+        /* =========================
+           ICON
+        ========================= */
+
+        .notification-icon {
+
+            width: 48px;
+
+            height: 48px;
+
+            min-width: 48px;
+
+            border-radius: 13px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 21px;
+        }
+
+
+        .budget-icon {
+
+            background: #fff7ed;
+
+        }
+
+
+        .expense-icon {
+
+            background: #fef2f2;
+
+        }
+
+
+        .success-icon {
+
+            background: #ecfdf5;
+
+        }
+
+
+        .info-icon {
+
+            background: #eff6ff;
+
+        }
+
+
+        .notification-content {
+
+            flex: 1;
+        }
+
+
+        .notification-title {
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            margin-bottom: 6px;
+        }
+
+
+        .notification-message {
+
+            color: #64748b;
+
+            font-size: 13px;
+
+            line-height: 1.5;
+
+            margin-bottom: 7px;
+        }
+
+
+        .notification-time {
+
+            color: #94a3b8;
+
+            font-size: 11px;
+        }
+
+
+        .unread-dot {
+
+            width: 9px;
+
+            height: 9px;
+
+            min-width: 9px;
+
+            border-radius: 50%;
+
+            background:
+                #4f46e5;
+
+            margin-top: 7px;
+        }
+
+
+        /* =========================
+           EMPTY
+        ========================= */
+
+        .empty {
+
+            padding: 70px 20px;
+
+            text-align: center;
+        }
+
+
+        .empty-icon {
+
+            width: 70px;
+
+            height: 70px;
+
+            margin:
+                0 auto 18px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            border-radius: 20px;
+
+            background: #eef2ff;
+
+            font-size: 32px;
+        }
+
+
+        .empty h3 {
+
+            font-size: 19px;
+
+            margin-bottom: 8px;
+        }
+
+
+        .empty p {
+
+            color: #64748b;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================
+           QUICK ACTIONS
+        ========================= */
+
+        .quick-actions {
+
+            display: grid;
+
+            grid-template-columns:
+                repeat(3, 1fr);
+
+            gap: 18px;
+
+            margin-top: 22px;
+        }
+
+
+        .action {
+
+            background: white;
+
+            border:
+                1px solid #e5e7eb;
+
+            border-radius: 13px;
+
+            padding: 18px;
+
+            text-decoration: none;
+
+            color: #172033;
+
+            transition: 0.2s;
+
+            box-shadow:
+                0 5px 18px
+                rgba(0,0,0,0.04);
+        }
+
+
+        .action:hover {
+
+            transform:
+                translateY(-3px);
+
+            box-shadow:
+                0 10px 25px
+                rgba(0,0,0,0.08);
+        }
+
+
+        .action-icon {
+
+            font-size: 23px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .action-title {
+
+            font-weight: bold;
+
+            font-size: 14px;
+
+            margin-bottom: 5px;
+        }
+
+
+        .action-text {
+
+            color: #64748b;
+
+            font-size: 11px;
+        }
+
+
+        /* =========================
+           MOBILE
+        ========================= */
+
+        @media(max-width: 850px) {
+
+            .navbar {
+
+                padding:
+                    15px 4%;
+
+                flex-direction: column;
+
+                gap: 12px;
+            }
+
+
+            .nav-links {
+
+                justify-content: center;
+            }
+
+
+            .summary {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+
+            .quick-actions {
+
+                grid-template-columns:
+                    1fr;
+            }
+
+        }
+
+
+        @media(max-width: 600px) {
+
+            .container {
+
+                width: 92%;
+
+                margin-top: 25px;
+            }
+
+
+            .heading {
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+                flex-direction: column;
+            }
+
+
+            .heading h1 {
+
+                font-size: 27px;
+            }
+
+
+            .notification {
+
+                padding:
+                    17px 15px;
+            }
+
+
+            .notification-icon {
+
+                width: 42px;
+
+                height: 42px;
+
+                min-width: 42px;
+            }
+
+
+            .nav-links a {
+
+                font-size: 12px;
+
+                padding:
+                    7px 8px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+{% include "expenses/_navbar.html" %}
+
+<!-- legacy navbar markup below is intentionally removed -->
+<!--
+    <a href="{% url 'dashboard' %}" class="logo">
+        Expense Tracker
+    </a>
+
+    <div class="nav-links">
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'expenses' %}">
+            Expenses
+        </a>
+
+        <a href="{% url 'add_expense' %}">
+            Add Expense
+        </a>
+
+        <a href="{% url 'reports' %}">
+            Reports
+        </a>
+
+        <a href="{% url 'budget' %}">
+            Budget
+        </a>
+
+        <a href="{% url 'profile' %}">
+            Profile
+        </a>
+
+        <a href="{% url 'notifications' %}" class="active">
+             Notifications
+        </a>
+
+        <a href="{% url 'logout_confirm' %}" class="logout-btn">
+            Logout
+        </a>
+
+    </div>
+
+-->
+
+
+<!-- =========================
+     MAIN
+========================= -->
+
+<div class="container">
+
+
+    <!-- HEADING -->
+
+    <div class="heading">
+
+
+        <div>
+
+            <h1>
+
+                Notifications 
+
+            </h1>
+
+
+            <p>
+
+                Stay updated about your expenses
+                and budget.
+
+            </p>
+
+        </div>
+
+
+        <button
+            class="mark-all"
+            onclick="markAllRead()"
+        >
+
+            ✓ Mark all as read
+
+        </button>
+
+
+    </div>
+
+
+    <!-- =========================
+         SUMMARY
+    ========================= -->
+
+    <div class="summary">
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                TOTAL NOTIFICATIONS
+
+            </div>
+
+            <div class="summary-value">
+
+                {{ notifications|length }}
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                UNREAD
+
+            </div>
+
+            <div
+                class="summary-value"
+                id="unreadCount"
+            >
+
+                {{ unread_count|default:"0" }}
+
+            </div>
+
+        </div>
+
+
+        <div class="summary-card">
+
+            <div class="summary-title">
+
+                STATUS
+
+            </div>
+
+            <div
+                class="summary-value"
+                style="color:#16a34a;"
+            >
+
+                Active
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =========================
+         NOTIFICATIONS
+    ========================= -->
+
+    <div class="notification-box">
+
+
+        <div class="box-header">
+
+            <h2>
+
+                Recent Notifications
+
+            </h2>
+
+
+            <span class="notification-count">
+
+                🔔 Updates
+
+            </span>
+
+        </div>
+
+
+        {% if notifications %}
+
+
+            {% for notification in notifications %}
+
+
+            <div
+                class="notification
+                {% if not notification.is_read %}
+                    unread
+                {% endif %}"
+            >
+
+
+                <!-- ICON -->
+
+                <div
+                    class="notification-icon
+
+                    {% if notification.type == 'budget' %}
+                        budget-icon
+
+                    {% elif notification.type == 'expense' %}
+                        expense-icon
+
+                    {% elif notification.type == 'success' %}
+                        success-icon
+
+                    {% else %}
+                        info-icon
+                    {% endif %}"
+                >
+
+
+                    {% if notification.type == 'budget' %}
+
+                        💰
+
+                    {% elif notification.type == 'expense' %}
+
+                        💸
+
+                    {% elif notification.type == 'success' %}
+
+                        ✅
+
+                    {% else %}
+
+                        🔔
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <!-- CONTENT -->
+
+                <div class="notification-content">
+
+
+                    <div class="notification-title">
+
+                        {{ notification.title }}
+
+                    </div>
+
+
+                    <div class="notification-message">
+
+                        {{ notification.message }}
+
+                    </div>
+
+
+                    <div class="notification-time">
+
+                        {{ notification.created_at|date:"d M Y, h:i A" }}
+
+                    </div>
+
+
+                </div>
+
+
+                {% if not notification.is_read %}
+
+                    <div
+                        class="unread-dot"
+                        title="Unread"
+                    ></div>
+
+                {% endif %}
+
+
+            </div>
+
+
+            {% endfor %}
+
+
+        {% else %}
+
+
+            <!-- EMPTY -->
+
+            <div class="empty">
+
+
+                <div class="empty-icon">
+
+                    🔔
+
+                </div>
+
+
+                <h3>
+
+                    No notifications
+
+                </h3>
+
+
+                <p>
+
+                    You're all caught up!
+                    New updates will appear here.
+
+                </p>
+
+
+            </div>
+
+
+        {% endif %}
+
+
+    </div>
+
+
+    <!-- =========================
+         QUICK ACTIONS
+    ========================= -->
+
+    <div class="quick-actions">
+
+
+        <a
+            href="{% url 'expenses' %}"
+            class="action"
+        >
+
+            <div class="action-icon">
+
+                💸
+
+            </div>
+
+            <div class="action-title">
+
+                View Expenses
+
+            </div>
+
+            <div class="action-text">
+
+                Check your recent spending.
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="{% url 'budget' %}"
+            class="action"
+        >
+
+            <div class="action-icon">
+
+                💰
+
+            </div>
+
+            <div class="action-title">
+
+                Check Budget
+
+            </div>
+
+            <div class="action-text">
+
+                See your monthly budget.
+
+            </div>
+
+        </a>
+
+
+        <a
+            href="{% url 'reports' %}"
+            class="action"
+        >
+
+            <div class="action-icon">
+
+                📊
+
+            </div>
+
+            <div class="action-title">
+
+                View Reports
+
+            </div>
+
+            <div class="action-text">
+
+                Analyze your spending.
+
+            </div>
+
+        </a>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+    function markAllRead() {
+
+        const notifications =
+            document.querySelectorAll(
+                ".notification.unread"
+            );
+
+
+        notifications.forEach(
+            function(notification) {
+
+                notification.classList.remove(
+                    "unread"
+                );
+
+                const dot =
+                    notification.querySelector(
+                        ".unread-dot"
+                    );
+
+                if (dot) {
+
+                    dot.remove();
+
+                }
+
+            }
+        );
+
+
+        const count =
+            document.getElementById(
+                "unreadCount"
+            );
+
+
+        if (count) {
+
+            count.innerText = "0";
+
+        }
+
+    }
+
+</script>
+
+
+</body>
+
+</html>

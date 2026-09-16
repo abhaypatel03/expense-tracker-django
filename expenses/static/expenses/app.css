@@ -1,0 +1,261 @@
+:root {
+    --app-bg: #eef2ff;
+    --app-bg-soft: #f5f3ff;
+    --app-cyan: #ecfeff;
+    --app-surface: rgba(255, 255, 255, 0.88);
+    --app-surface-solid: #ffffff;
+    --app-text: #172033;
+    --app-muted: #64748b;
+    --app-border: rgba(255, 255, 255, 0.72);
+    --app-line: rgba(148, 163, 184, 0.22);
+    --app-primary: #6366f1;
+    --app-primary-dark: #4f46e5;
+    --app-secondary: #8b5cf6;
+    --app-success: #0f9f79;
+    --app-danger: #dc4f61;
+    --app-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+    --app-shadow-lg: 0 18px 45px rgba(15, 23, 42, 0.12);
+}
+
+html {
+    min-height: 100%;
+    background: var(--app-bg);
+}
+
+body {
+    min-height: 100vh;
+    color: var(--app-text);
+    background:
+        radial-gradient(circle at 8% 12%, rgba(99, 102, 241, 0.13), transparent 28%),
+        radial-gradient(circle at 92% 82%, rgba(139, 92, 246, 0.12), transparent 28%),
+        linear-gradient(135deg, var(--app-bg) 0%, var(--app-bg-soft) 50%, var(--app-cyan) 100%) !important;
+    position: relative;
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: "";
+    position: fixed;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    pointer-events: none;
+    filter: blur(56px);
+    opacity: 0.22;
+    z-index: -1;
+}
+
+body::before {
+    top: 8%;
+    left: -110px;
+    background: #818cf8;
+}
+
+body::after {
+    right: -110px;
+    bottom: 4%;
+    background: #67e8f9;
+}
+
+a {
+    color: var(--app-primary-dark);
+}
+
+.app-navbar,
+.navbar {
+    background: rgba(255, 255, 255, 0.78) !important;
+    color: var(--app-text) !important;
+    border: 1px solid rgba(255, 255, 255, 0.82);
+    border-top: 0;
+    border-radius: 0 0 18px 18px;
+    box-shadow: var(--app-shadow);
+    backdrop-filter: blur(16px);
+}
+
+.app-navbar .logo,
+.navbar .logo {
+    color: var(--app-text) !important;
+}
+
+.app-navbar .nav-links a,
+.navbar .nav-links a {
+    color: var(--app-muted) !important;
+}
+
+.app-navbar .nav-links a:hover,
+.app-navbar .nav-links a.active,
+.navbar .nav-links a:hover,
+.navbar .nav-links a.active {
+    color: var(--app-primary-dark) !important;
+    background: rgba(99, 102, 241, 0.10) !important;
+    transform: translateY(-1px);
+}
+
+.app-navbar .nav-links a.logout-btn,
+.navbar .nav-links a.logout-btn {
+    color: #fff !important;
+    background: linear-gradient(135deg, #f06a78, var(--app-danger)) !important;
+}
+
+.container,
+.page-wrapper,
+.expense-page,
+.register-wrapper,
+.login-container {
+    animation: app-rise 0.55s ease both;
+}
+
+.card,
+.summary-card,
+.filter-card,
+.expense-card,
+.password-card,
+.profile-card,
+.report-card,
+.budget-card,
+.notification-card,
+.expense-box,
+.table-container,
+.content-card,
+.form-card,
+.login-container,
+.register-wrapper {
+    background: var(--app-surface) !important;
+    border: 1px solid var(--app-border) !important;
+    box-shadow: var(--app-shadow) !important;
+    backdrop-filter: blur(12px);
+}
+
+.card:hover,
+.summary-card:hover,
+.report-card:hover,
+.budget-card:hover,
+.notification-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--app-shadow-lg) !important;
+}
+
+button,
+.btn,
+.add-btn,
+.login-btn,
+.btn-save,
+.primary-btn,
+.submit-btn,
+.action-btn {
+    background: linear-gradient(135deg, var(--app-primary), var(--app-secondary)) !important;
+    color: #fff !important;
+    border: 0 !important;
+    box-shadow: 0 8px 18px rgba(99, 102, 241, 0.22);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+}
+
+button:hover,
+.btn:hover,
+.add-btn:hover,
+.login-btn:hover,
+.btn-save:hover,
+.primary-btn:hover,
+.submit-btn:hover,
+.action-btn:hover {
+    filter: saturate(1.08);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 24px rgba(99, 102, 241, 0.28);
+}
+
+input:not([type="checkbox"]):not([type="radio"]),
+select,
+textarea {
+    color: var(--app-text) !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    border: 1px solid rgba(148, 163, 184, 0.34) !important;
+    border-radius: 11px !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #94a3b8;
+}
+
+input:not([type="checkbox"]):not([type="radio"]):focus,
+select:focus,
+textarea:focus {
+    border-color: var(--app-primary) !important;
+    outline: 0;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.13) !important;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+    overflow: hidden;
+    background: rgba(255, 255, 255, 0.68);
+    border: 1px solid var(--app-line);
+    border-radius: 14px;
+}
+
+thead th {
+    background: rgba(99, 102, 241, 0.08) !important;
+    color: var(--app-muted);
+}
+
+tbody tr {
+    transition: background 0.2s ease;
+}
+
+tbody tr:hover {
+    background: rgba(99, 102, 241, 0.055);
+}
+
+.badge,
+.category-badge,
+.tag,
+.status-badge {
+    border: 1px solid rgba(99, 102, 241, 0.12);
+    background: rgba(99, 102, 241, 0.10) !important;
+    color: var(--app-primary-dark) !important;
+    border-radius: 999px !important;
+}
+
+.footer {
+    background: rgba(255, 255, 255, 0.58) !important;
+    border-top: 1px solid var(--app-line);
+    color: var(--app-muted) !important;
+    backdrop-filter: blur(12px);
+}
+
+@keyframes app-rise {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+    .container { width: min(94%, 1200px) !important; }
+    .app-navbar, .navbar { height: auto !important; min-height: 74px; }
+}
+
+@media (max-width: 650px) {
+    .card, .summary-card, .filter-card, .expense-card, .password-card, .profile-card, .report-card {
+        border-radius: 15px !important;
+    }
+
+    table { display: block; max-width: 100%; overflow-x: auto; }
+}
+
+/* Consistent main page headings */
+body h1 {
+    color: #172033 !important;
+    font-size: 32px !important;
+    font-weight: 750 !important;
+    line-height: 1.2 !important;
+    letter-spacing: 0 !important;
+}
+
+@media (max-width: 650px) {
+    body h1 {
+        font-size: 26px !important;
+    }
+}
+
